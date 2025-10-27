@@ -1,11 +1,7 @@
 import React, { useState } from 'react';
 import { Download, CheckCircle, Circle, Calendar, BookOpen, RefreshCw } from 'lucide-react';
 
-const Hot100Plan = () => {
-  import React, { useState } from 'react';
-import { Download, CheckCircle, Circle, Calendar, BookOpen, RefreshCw } from 'lucide-react';
-
-const Hot100Plan = () => {
+const Hot100Plan: React.FC = () => {
   // 定义Hot 100题目
   const hot100Problems = [
     // 第1周：哈希表+数组
@@ -20,7 +16,6 @@ const Hot100Plan = () => {
     { id: 56, title: 'Merge Intervals', difficulty: '中等', category: '数组', day: 4 },
     { id: 238, title: 'Product of Array Except Self', difficulty: '中等', category: '数组', day: 5 },
     { id: 41, title: 'First Missing Positive', difficulty: '困难', category: '数组', day: 5 },
-    
     // 第2周：链表+栈
     { id: 206, title: 'Reverse Linked List', difficulty: '简单', category: '链表', day: 8 },
     { id: 21, title: 'Merge Two Sorted Lists', difficulty: '简单', category: '链表', day: 8 },
@@ -35,7 +30,6 @@ const Hot100Plan = () => {
     { id: 155, title: 'Min Stack', difficulty: '中等', category: '栈', day: 12 },
     { id: 739, title: 'Daily Temperatures', difficulty: '中等', category: '单调栈', day: 13 },
     { id: 84, title: 'Largest Rectangle', difficulty: '困难', category: '单调栈', day: 13 },
-    
     // 第3周：二叉树基础
     { id: 144, title: 'Binary Tree Preorder', difficulty: '简单', category: '二叉树', day: 15 },
     { id: 94, title: 'Binary Tree Inorder', difficulty: '简单', category: '二叉树', day: 15 },
@@ -47,15 +41,13 @@ const Hot100Plan = () => {
     { id: 437, title: 'Path Sum III', difficulty: '中等', category: '二叉树', day: 18 },
     { id: 105, title: 'Construct from Preorder/Inorder', difficulty: '中等', category: '二叉树', day: 19 },
     { id: 114, title: 'Flatten to Linked List', difficulty: '中等', category: '二叉树', day: 19 },
-    
-    // 第4周：二叉搜索树+二叉树进阶
+    // 第4周：BST + 进阶
     { id: 98, title: 'Validate BST', difficulty: '中等', category: 'BST', day: 22 },
     { id: 230, title: 'Kth Smallest in BST', difficulty: '中等', category: 'BST', day: 22 },
     { id: 538, title: 'Convert BST to Greater Tree', difficulty: '中等', category: 'BST', day: 23 },
     { id: 236, title: 'Lowest Common Ancestor', difficulty: '中等', category: '二叉树', day: 23 },
     { id: 124, title: 'Binary Tree Max Path Sum', difficulty: '困难', category: '二叉树', day: 24 },
     { id: 297, title: 'Serialize/Deserialize Tree', difficulty: '困难', category: '二叉树', day: 24 },
-    
     // 第5周：图论
     { id: 200, title: 'Number of Islands', difficulty: '中等', category: '图-DFS', day: 29 },
     { id: 994, title: 'Rotting Oranges', difficulty: '中等', category: '图-BFS', day: 29 },
@@ -63,8 +55,7 @@ const Hot100Plan = () => {
     { id: 208, title: 'Implement Trie', difficulty: '中等', category: 'Trie', day: 30 },
     { id: 399, title: 'Evaluate Division', difficulty: '中等', category: '图-DFS', day: 31 },
     { id: 406, title: 'Queue Reconstruction', difficulty: '中等', category: '贪心', day: 31 },
-    
-    // 第6周：动态规划-基础
+    // 第6周：DP 基础
     { id: 70, title: 'Climbing Stairs', difficulty: '简单', category: 'DP-基础', day: 36 },
     { id: 118, title: 'Pascals Triangle', difficulty: '简单', category: 'DP-基础', day: 36 },
     { id: 198, title: 'House Robber', difficulty: '中等', category: 'DP-线性', day: 37 },
@@ -73,8 +64,7 @@ const Hot100Plan = () => {
     { id: 322, title: 'Coin Change', difficulty: '中等', category: 'DP-完全背包', day: 38 },
     { id: 139, title: 'Word Break', difficulty: '中等', category: 'DP-字符串', day: 39 },
     { id: 300, title: 'Longest Increasing Subsequence', difficulty: '中等', category: 'DP-子序列', day: 39 },
-    
-    // 第7周：动态规划-进阶
+    // 第7周：DP 进阶
     { id: 152, title: 'Maximum Product Subarray', difficulty: '中等', category: 'DP-数组', day: 43 },
     { id: 416, title: 'Partition Equal Subset Sum', difficulty: '中等', category: 'DP-背包', day: 43 },
     { id: 32, title: 'Longest Valid Parentheses', difficulty: '困难', category: 'DP-字符串', day: 44 },
@@ -83,7 +73,6 @@ const Hot100Plan = () => {
     { id: 647, title: 'Palindromic Substrings', difficulty: '中等', category: 'DP-字符串', day: 45 },
     { id: 221, title: 'Maximal Square', difficulty: '中等', category: 'DP-矩阵', day: 46 },
     { id: 85, title: 'Maximal Rectangle', difficulty: '困难', category: 'DP-矩阵', day: 46 },
-    
     // 第8周：回溯
     { id: 46, title: 'Permutations', difficulty: '中等', category: '回溯-排列', day: 50 },
     { id: 47, title: 'Permutations II', difficulty: '中等', category: '回溯-排列', day: 50 },
@@ -95,7 +84,6 @@ const Hot100Plan = () => {
     { id: 79, title: 'Word Search', difficulty: '中等', category: '回溯-矩阵', day: 53 },
     { id: 131, title: 'Palindrome Partitioning', difficulty: '中等', category: '回溯', day: 54 },
     { id: 51, title: 'N-Queens', difficulty: '困难', category: '回溯', day: 54 },
-    
     // 第9周：贪心+其他
     { id: 121, title: 'Best Time to Buy/Sell Stock', difficulty: '简单', category: '贪心', day: 57 },
     { id: 122, title: 'Best Time II', difficulty: '中等', category: '贪心', day: 57 },
@@ -103,7 +91,6 @@ const Hot100Plan = () => {
     { id: 45, title: 'Jump Game II', difficulty: '中等', category: '贪心', day: 58 },
     { id: 763, title: 'Partition Labels', difficulty: '中等', category: '贪心', day: 59 },
     { id: 621, title: 'Task Scheduler', difficulty: '中等', category: '贪心', day: 59 },
-    
     // 第10周：高频其他题
     { id: 136, title: 'Single Number', difficulty: '简单', category: '位运算', day: 64 },
     { id: 169, title: 'Majority Element', difficulty: '简单', category: '数组', day: 64 },
@@ -119,16 +106,20 @@ const Hot100Plan = () => {
 
   // 生成完整的70天计划（包括复习）
   const generateFullPlan = () => {
-    const plan = [];
+    const plan: {
+      day: number;
+      newProblems: typeof hot100Problems;
+      reviews: { interval: number; reviewRound: string; problems: typeof hot100Problems; originalDay: number }[];
+    }[] = [];
     const reviewIntervals = [1, 3, 7, 14];
-    
+
     for (let day = 1; day <= 70; day++) {
       const dayPlan = {
         day,
         newProblems: hot100Problems.filter(p => p.day === day),
-        reviews: []
+        reviews: [] as { interval: number; reviewRound: string; problems: typeof hot100Problems; originalDay: number }[],
       };
-      
+
       reviewIntervals.forEach(interval => {
         const reviewDay = day - interval;
         if (reviewDay > 0) {
@@ -143,18 +134,18 @@ const Hot100Plan = () => {
           }
         }
       });
-      
+
       plan.push(dayPlan);
     }
-    
+
     return plan;
   };
 
-  const [checkedProblems, setCheckedProblems] = useState({});
+  const [checkedProblems, setCheckedProblems] = useState<Record<number, boolean>>({});
   const [currentDay, setCurrentDay] = useState(1);
   const planData = generateFullPlan();
 
-  const toggleProblem = (problemId) => {
+  const toggleProblem = (problemId: number) => {
     setCheckedProblems(prev => ({
       ...prev,
       [problemId]: !prev[problemId]
@@ -163,23 +154,23 @@ const Hot100Plan = () => {
 
   const downloadCSV = () => {
     let csv = '日期,任务类型,复习轮次,题号,题目,难度,分类,原学习日期\n';
-    
+
     planData.forEach(dayPlan => {
       dayPlan.newProblems.forEach(p => {
         csv += `第${dayPlan.day}天,新题学习,-,${p.id},${p.title},${p.difficulty},${p.category},-\n`;
       });
-      
+
       dayPlan.reviews.forEach(review => {
         review.problems.forEach(p => {
           csv += `第${dayPlan.day}天,复习,${review.reviewRound},${p.id},${p.title},${p.difficulty},${p.category},第${review.originalDay}天\n`;
         });
       });
-      
+
       if (dayPlan.newProblems.length === 0 && dayPlan.reviews.length === 0) {
         csv += `第${dayPlan.day}天,休息日,-,-,-,-,-,-\n`;
       }
     });
-    
+
     const blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8;' });
     const link = document.createElement('a');
     link.href = URL.createObjectURL(blob);
@@ -187,8 +178,8 @@ const Hot100Plan = () => {
     link.click();
   };
 
-  const getDifficultyColor = (difficulty) => {
-    switch(difficulty) {
+  const getDifficultyColor = (difficulty: string) => {
+    switch (difficulty) {
       case '简单': return 'text-green-600 bg-green-50 border-green-200';
       case '中等': return 'text-yellow-600 bg-yellow-50 border-yellow-200';
       case '困难': return 'text-red-600 bg-red-50 border-red-200';
@@ -204,6 +195,7 @@ const Hot100Plan = () => {
   const totalNewToday = currentDayPlan?.newProblems.length || 0;
   const totalReviewToday = currentDayPlan?.reviews.reduce((sum, r) => sum + r.problems.length, 0) || 0;
 
+  // ⭐⭐⭐ 关键：一定要 return JSX！
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 p-6">
       <div className="max-w-7xl mx-auto">
@@ -223,7 +215,7 @@ const Hot100Plan = () => {
               导出完整计划
             </button>
           </div>
-          
+
           <div className="mt-6">
             <div className="flex items-center justify-between mb-2">
               <span className="text-sm font-medium text-gray-700">
@@ -232,7 +224,7 @@ const Hot100Plan = () => {
               <span className="text-sm font-bold text-indigo-600">{progress}%</span>
             </div>
             <div className="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
-              <div 
+              <div
                 className="bg-gradient-to-r from-indigo-500 to-purple-600 h-3 rounded-full transition-all duration-500"
                 style={{ width: `${progress}%` }}
               />
@@ -248,29 +240,28 @@ const Hot100Plan = () => {
             </h2>
             <div className="flex items-center gap-3">
               <span className="text-sm text-gray-600">
-                今日任务: <span className="font-semibold text-indigo-600">{totalNewToday}道新题</span> + 
+                今日任务: <span className="font-semibold text-indigo-600">{totalNewToday}道新题</span> +
                 <span className="font-semibold text-amber-600"> {totalReviewToday}道复习</span>
               </span>
             </div>
           </div>
-          
+
           <div className="grid grid-cols-7 md:grid-cols-14 gap-2">
             {planData.map((dayPlan) => {
               const hasNew = dayPlan.newProblems.length > 0;
               const hasReview = dayPlan.reviews.length > 0;
               const isRest = !hasNew && !hasReview;
-              
+
               return (
                 <button
                   key={dayPlan.day}
                   onClick={() => setCurrentDay(dayPlan.day)}
-                  className={`p-3 rounded-lg text-sm font-medium transition-all ${
-                    currentDay === dayPlan.day
-                      ? 'bg-indigo-600 text-white shadow-lg scale-105'
-                      : isRest
+                  className={`p-3 rounded-lg text-sm font-medium transition-all ${currentDay === dayPlan.day
+                    ? 'bg-indigo-600 text-white shadow-lg scale-105'
+                    : isRest
                       ? 'bg-gray-100 text-gray-400 hover:bg-gray-200'
                       : 'bg-white border-2 border-indigo-200 text-indigo-700 hover:bg-indigo-50'
-                  }`}
+                    }`}
                 >
                   <div className="text-center">
                     <div className="font-bold">D{dayPlan.day}</div>
@@ -316,11 +307,10 @@ const Hot100Plan = () => {
                   <div
                     key={`new-${problem.id}`}
                     onClick={() => toggleProblem(problem.id)}
-                    className={`p-4 border-2 rounded-xl cursor-pointer transition-all hover:shadow-md ${
-                      checkedProblems[problem.id] 
-                        ? 'bg-green-50 border-green-300' 
-                        : 'bg-white border-gray-200 hover:border-indigo-300'
-                    }`}
+                    className={`p-4 border-2 rounded-xl cursor-pointer transition-all hover:shadow-md ${checkedProblems[problem.id]
+                      ? 'bg-green-50 border-green-300'
+                      : 'bg-white border-gray-200 hover:border-indigo-300'
+                      }`}
                   >
                     <div className="flex items-start gap-3">
                       {checkedProblems[problem.id] ? (
@@ -373,11 +363,10 @@ const Hot100Plan = () => {
                         <div
                           key={`review-${problem.id}-${idx}`}
                           onClick={() => toggleProblem(problem.id)}
-                          className={`p-3 rounded-lg cursor-pointer transition-all ${
-                            checkedProblems[problem.id]
-                              ? 'bg-green-100 border-2 border-green-400'
-                              : 'bg-white border-2 border-amber-300 hover:bg-amber-50'
-                          }`}
+                          className={`p-3 rounded-lg cursor-pointer transition-all ${checkedProblems[problem.id]
+                            ? 'bg-green-100 border-2 border-green-400'
+                            : 'bg-white border-2 border-amber-300 hover:bg-amber-50'
+                            }`}
                         >
                           <div className="flex items-center gap-2">
                             {checkedProblems[problem.id] ? (
@@ -440,14 +429,5 @@ const Hot100Plan = () => {
   );
 };
 
-export default Hot100Plan;
-  // 你的原代码从这里开始（保持不变）
-  // -------------------------------------------------
-  // （直接把你消息里的整段代码粘贴到此处，
-  //   最后已包含 `export default Hot100Plan;`）
-  // -------------------------------------------------
-};
-
-// 注意：如果你粘贴的结尾已经有 `export default Hot100Plan;`，就保留它。
-// 这里我们再导出一次以确保 App 正常渲染：
+// 默认导出给 main.tsx 使用
 export default Hot100Plan;
