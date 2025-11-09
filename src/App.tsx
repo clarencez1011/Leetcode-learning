@@ -1,18 +1,40 @@
 import React, { useState } from 'react';
 import { Download, CheckCircle, Circle, Calendar, BookOpen, RefreshCw } from 'lucide-react';
 
-const Hot100Plan = () => {
-  // 按照代码随想录顺序整理的题目
-  const carlProblems = [
-    // 第1周：数组（14题）
+interface Problem {
+  id: number;
+  title: string;
+  difficulty: string;
+  category: string;
+  day: number;
+  carl: boolean;
+}
+
+interface Review {
+  interval: number;
+  reviewRound: string;
+  problems: Problem[];
+  originalDay: number;
+}
+
+interface DayPlan {
+  day: number;
+  newProblems: Problem[];
+  reviews: Review[];
+}
+
+interface CheckedProblems {
+  [key: number]: boolean;
+}
+
+const Hot100Plan: React.FC = () => {
+  const carlProblems: Problem[] = [
     { id: 704, title: '二分查找', difficulty: '简单', category: '数组-二分', day: 1, carl: true },
     { id: 27, title: '移除元素', difficulty: '简单', category: '数组-双指针', day: 1, carl: true },
     { id: 977, title: '有序数组的平方', difficulty: '简单', category: '数组-双指针', day: 2, carl: true },
     { id: 209, title: '长度最小的子数组', difficulty: '中等', category: '数组-滑动窗口', day: 2, carl: true },
     { id: 59, title: '螺旋矩阵II', difficulty: '中等', category: '数组-模拟', day: 3, carl: true },
     { id: 54, title: '螺旋矩阵', difficulty: '中等', category: '数组-模拟', day: 3, carl: true },
-    
-    // 第2周：链表（10题）
     { id: 203, title: '移除链表元素', difficulty: '简单', category: '链表', day: 8, carl: true },
     { id: 707, title: '设计链表', difficulty: '中等', category: '链表', day: 8, carl: true },
     { id: 206, title: '反转链表', difficulty: '简单', category: '链表', day: 9, carl: true },
@@ -20,8 +42,6 @@ const Hot100Plan = () => {
     { id: 19, title: '删除链表的倒数第N个节点', difficulty: '中等', category: '链表', day: 10, carl: true },
     { id: 160, title: '链表相交', difficulty: '简单', category: '链表', day: 10, carl: true },
     { id: 142, title: '环形链表II', difficulty: '中等', category: '链表', day: 11, carl: true },
-    
-    // 第3周：哈希表（10题）
     { id: 242, title: '有效的字母异位词', difficulty: '简单', category: '哈希表', day: 15, carl: true },
     { id: 349, title: '两个数组的交集', difficulty: '简单', category: '哈希表', day: 15, carl: true },
     { id: 202, title: '快乐数', difficulty: '简单', category: '哈希表', day: 16, carl: true },
@@ -30,15 +50,11 @@ const Hot100Plan = () => {
     { id: 383, title: '赎金信', difficulty: '简单', category: '哈希表', day: 17, carl: true },
     { id: 15, title: '三数之和', difficulty: '中等', category: '哈希表', day: 18, carl: true },
     { id: 18, title: '四数之和', difficulty: '中等', category: '哈希表', day: 18, carl: true },
-    
-    // 第4周：字符串（8题）
     { id: 344, title: '反转字符串', difficulty: '简单', category: '字符串', day: 22, carl: true },
     { id: 541, title: '反转字符串II', difficulty: '简单', category: '字符串', day: 22, carl: true },
     { id: 151, title: '翻转字符串里的单词', difficulty: '中等', category: '字符串', day: 23, carl: true },
     { id: 28, title: '实现strStr', difficulty: '简单', category: '字符串-KMP', day: 24, carl: true },
     { id: 459, title: '重复的子字符串', difficulty: '简单', category: '字符串-KMP', day: 24, carl: true },
-    
-    // 第5周：栈与队列（9题）
     { id: 232, title: '用栈实现队列', difficulty: '简单', category: '栈队列', day: 29, carl: true },
     { id: 225, title: '用队列实现栈', difficulty: '简单', category: '栈队列', day: 29, carl: true },
     { id: 20, title: '有效的括号', difficulty: '简单', category: '栈', day: 30, carl: true },
@@ -46,8 +62,6 @@ const Hot100Plan = () => {
     { id: 150, title: '逆波兰表达式求值', difficulty: '中等', category: '栈', day: 31, carl: true },
     { id: 239, title: '滑动窗口最大值', difficulty: '困难', category: '单调队列', day: 31, carl: true },
     { id: 347, title: '前K个高频元素', difficulty: '中等', category: '堆', day: 32, carl: true },
-    
-    // 第6-7周：二叉树（30题）
     { id: 144, title: '二叉树的前序遍历', difficulty: '简单', category: '二叉树遍历', day: 36, carl: true },
     { id: 94, title: '二叉树的中序遍历', difficulty: '简单', category: '二叉树遍历', day: 36, carl: true },
     { id: 145, title: '二叉树的后序遍历', difficulty: '简单', category: '二叉树遍历', day: 36, carl: true },
@@ -76,8 +90,6 @@ const Hot100Plan = () => {
     { id: 669, title: '修剪二叉搜索树', difficulty: '中等', category: 'BST', day: 48, carl: true },
     { id: 108, title: '将有序数组转换为二叉搜索树', difficulty: '简单', category: 'BST', day: 49, carl: true },
     { id: 538, title: '把二叉搜索树转换为累加树', difficulty: '中等', category: 'BST', day: 49, carl: true },
-    
-    // 第8-9周：回溯（18题）
     { id: 77, title: '组合', difficulty: '中等', category: '回溯-组合', day: 50, carl: true },
     { id: 216, title: '组合总和III', difficulty: '中等', category: '回溯-组合', day: 50, carl: true },
     { id: 17, title: '电话号码的字母组合', difficulty: '中等', category: '回溯-组合', day: 51, carl: true },
@@ -93,8 +105,6 @@ const Hot100Plan = () => {
     { id: 332, title: '重新安排行程', difficulty: '困难', category: '回溯', day: 56, carl: true },
     { id: 51, title: 'N皇后', difficulty: '困难', category: '回溯', day: 56, carl: true },
     { id: 37, title: '解数独', difficulty: '困难', category: '回溯', day: 57, carl: true },
-    
-    // 第10-11周：贪心（20题）
     { id: 455, title: '分发饼干', difficulty: '简单', category: '贪心', day: 57, carl: true },
     { id: 376, title: '摆动序列', difficulty: '中等', category: '贪心', day: 58, carl: true },
     { id: 53, title: '最大子数组和', difficulty: '中等', category: '贪心', day: 58, carl: true },
@@ -112,8 +122,6 @@ const Hot100Plan = () => {
     { id: 56, title: '合并区间', difficulty: '中等', category: '贪心-区间', day: 64, carl: true },
     { id: 738, title: '单调递增的数字', difficulty: '中等', category: '贪心', day: 65, carl: true },
     { id: 968, title: '监控二叉树', difficulty: '困难', category: '贪心', day: 65, carl: true },
-    
-    // 第12-16周：动态规划（50题）
     { id: 509, title: '斐波那契数', difficulty: '简单', category: 'DP-基础', day: 66, carl: true },
     { id: 70, title: '爬楼梯', difficulty: '简单', category: 'DP-基础', day: 66, carl: true },
     { id: 746, title: '使用最小花费爬楼梯', difficulty: '简单', category: 'DP-基础', day: 67, carl: true },
@@ -155,12 +163,12 @@ const Hot100Plan = () => {
     { id: 208, title: '实现Trie', difficulty: '中等', category: 'Trie树', day: 86, carl: true },
   ];
 
-  const generateFullPlan = () => {
-    const plan = [];
+  const generateFullPlan = (): DayPlan[] => {
+    const plan: DayPlan[] = [];
     const reviewIntervals = [1, 3, 7, 14];
     
     for (let day = 1; day <= 90; day++) {
-      const dayPlan = {
+      const dayPlan: DayPlan = {
         day,
         newProblems: carlProblems.filter(p => p.day === day),
         reviews: []
@@ -187,18 +195,18 @@ const Hot100Plan = () => {
     return plan;
   };
 
-  const [checkedProblems, setCheckedProblems] = useState({});
-  const [currentDay, setCurrentDay] = useState(1);
+  const [checkedProblems, setCheckedProblems] = useState<CheckedProblems>({});
+  const [currentDay, setCurrentDay] = useState<number>(1);
   const planData = generateFullPlan();
 
-  const toggleProblem = (problemId) => {
+  const toggleProblem = (problemId: number): void => {
     setCheckedProblems(prev => ({
       ...prev,
       [problemId]: !prev[problemId]
     }));
   };
 
-  const downloadCSV = () => {
+  const downloadCSV = (): void => {
     let csv = '日期,任务类型,复习轮次,题号,题目,难度,分类,原学习日期\n';
     
     planData.forEach(dayPlan => {
@@ -224,7 +232,7 @@ const Hot100Plan = () => {
     link.click();
   };
 
-  const getDifficultyColor = (difficulty) => {
+  const getDifficultyColor = (difficulty: string): string => {
     switch(difficulty) {
       case '简单': return 'text-green-600 bg-green-50 border-green-200';
       case '中等': return 'text-yellow-600 bg-yellow-50 border-yellow-200';
