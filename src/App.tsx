@@ -195,16 +195,61 @@ const Hot100Plan: React.FC = () => {
     return plan;
   };
 
-  const [checkedProblems, setCheckedProblems] = useState<CheckedProblems>({});
-  const [currentDay, setCurrentDay] = useState<number>(1);
+  // 从 localStorage 加载进度
+  const loadProgress = (): CheckedProblems => {
+    try {
+      const saved = localStorage.getItem('carlPlanProgress');
+      if (saved) {
+        return JSON.parse(saved);
+      }
+    } catch (error) {
+      console.error('加载进度失败:', error);
+    }
+    return {};
+  };
+
+  // 从 localStorage 加载当前天数
+  const loadCurrentDay = (): number => {
+    try {
+      const saved = localStorage.getItem('carlPlanCurrentDay');
+      if (saved) {
+        return parseInt(saved, 10);
+      }
+    } catch (error) {
+      console.error('加载当前天数失败:', error);
+    }
+    return 1;
+  };
+
+  const [checkedProblems, setCheckedProblems] = useState<CheckedProblems>(loadProgress);
+  const [currentDay, setCurrentDay] = useState<number>(loadCurrentDay);
   const planData = generateFullPlan();
 
+  // 保存进度到 localStorage
   const toggleProblem = (problemId: number): void => {
-    setCheckedProblems(prev => ({
-      ...prev,
-      [problemId]: !prev[problemId]
-    }));
+    setCheckedProblems(prev => {
+      const newState = {
+        ...prev,
+        [problemId]: !prev[problemId]
+      };
+      // 保存到 localStorage
+      try {
+        localStorage.setItem('carlPlanProgress', JSON.stringify(newState));
+      } catch (error) {
+        console.error('保存进度失败:', error);
+      }
+      return newState;
+    });
   };
+
+  // 监听 currentDay 变化并保存
+  React.useEffect(() => {
+    try {
+      localStorage.setItem('carlPlanCurrentDay', currentDay.toString());
+    } catch (error) {
+      console.error('保存当前天数失败:', error);
+    }
+  }, [currentDay]);
 
   const downloadCSV = (): void => {
     let csv = '日期,任务类型,复习轮次,题号,题目,难度,分类,原学习日期\n';
@@ -230,6 +275,65 @@ const Hot100Plan: React.FC = () => {
     link.href = URL.createObjectURL(blob);
     link.download = '代码随想录刷题计划表.csv';
     link.click();
+  };
+
+  // 导出进度数据
+  const exportProgress = (): void => {
+    const data = {
+      checkedProblems,
+      currentDay,
+      exportDate: new Date().toISOString(),
+      totalCompleted: completedProblems
+    };
+    const json = JSON.stringify(data, null, 2);
+    const blob = new Blob([json], { type: 'application/json' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = `刷题进度_${new Date().toLocaleDateString()}.json`;
+    link.click();
+  };
+
+  // 导入进度数据
+  const importProgress = (): void => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.json';
+    input.onchange = (e: Event) => {
+      const file = (e.target as HTMLInputElement).files?.[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          try {
+            const data = JSON.parse(event.target?.result as string);
+            if (data.checkedProblems) {
+              setCheckedProblems(data.checkedProblems);
+              localStorage.setItem('carlPlanProgress', JSON.stringify(data.checkedProblems));
+            }
+            if (data.currentDay) {
+              setCurrentDay(data.currentDay);
+              localStorage.setItem('carlPlanCurrentDay', data.currentDay.toString());
+            }
+            alert('导入成功！');
+          } catch (error) {
+            alert('导入失败，文件格式错误！');
+            console.error('导入失败:', error);
+          }
+        };
+        reader.readAsText(file);
+      }
+    };
+    input.click();
+  };
+
+  // 重置所有进度
+  const resetProgress = (): void => {
+    if (confirm('确定要重置所有进度吗？此操作不可恢复！')) {
+      setCheckedProblems({});
+      setCurrentDay(1);
+      localStorage.removeItem('carlPlanProgress');
+      localStorage.removeItem('carlPlanCurrentDay');
+      alert('进度已重置！');
+    }
   };
 
   const getDifficultyColor = (difficulty: string): string => {
@@ -260,13 +364,40 @@ const Hot100Plan: React.FC = () => {
               </h1>
               <p className="text-gray-600">90天系统掌握算法 · 跟随Carl哥顺序 · 1-3-7-14天复习法</p>
             </div>
-            <button
-              onClick={downloadCSV}
-              className="flex items-center gap-2 bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700 transition-colors shadow-md"
-            >
-              <Download size={20} />
-              导出完整计划
-            </button>
+            <div className="flex gap-2">
+              <button
+                onClick={downloadCSV}
+                className="flex items-center gap-2 bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors shadow-md text-sm"
+                title="导出计划表CSV"
+              >
+                <Download size={18} />
+                导出计划
+              </button>
+              <button
+                onClick={exportProgress}
+                className="flex items-center gap-2 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors shadow-md text-sm"
+                title="导出进度备份"
+              >
+                <Download size={18} />
+                备份进度
+              </button>
+              <button
+                onClick={importProgress}
+                className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors shadow-md text-sm"
+                title="导入进度备份"
+              >
+                <BookOpen size={18} />
+                导入进度
+              </button>
+              <button
+                onClick={resetProgress}
+                className="flex items-center gap-2 bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors shadow-md text-sm"
+                title="重置所有进度"
+              >
+                <RefreshCw size={18} />
+                重置
+              </button>
+            </div>
           </div>
           
           <div className="mt-6">
@@ -493,6 +624,15 @@ const Hot100Plan: React.FC = () => {
                 programmercarl.com
               </a> 
               网站学习。
+            </p>
+          </div>
+          <div className="mt-3 p-3 bg-green-50 rounded-lg border border-green-200">
+            <p className="text-sm text-green-800 flex items-center gap-2">
+              <CheckCircle size={16} className="text-green-600" />
+              <span>
+                <span className="font-semibold">💾 自动保存：</span>
+                你的刷题进度会自动保存到浏览器本地，刷新页面不会丢失。建议定期点击"备份进度"导出数据以防万一。
+              </span>
             </p>
           </div>
         </div>
