@@ -33,24 +33,23 @@ const Hot100Plan = () => {
     { id: 84, title: 'Largest Rectangle', difficulty: '困难', category: '单调栈', day: 13 },
     
     // 第3周：二叉树基础
-    { id: 144, title: 'Binary Tree Preorder', difficulty: '简单', category: '二叉树', day: 15 },
-    { id: 94, title: 'Binary Tree Inorder', difficulty: '简单', category: '二叉树', day: 15 },
-    { id: 102, title: 'Level Order Traversal', difficulty: '中等', category: '二叉树', day: 16 },
-    { id: 104, title: 'Maximum Depth of Binary Tree', difficulty: '简单', category: '二叉树', day: 16 },
-    { id: 226, title: 'Invert Binary Tree', difficulty: '简单', category: '二叉树', day: 17 },
-    { id: 101, title: 'Symmetric Tree', difficulty: '简单', category: '二叉树', day: 17 },
-    { id: 543, title: 'Diameter of Binary Tree', difficulty: '简单', category: '二叉树', day: 18 },
-    { id: 437, title: 'Path Sum III', difficulty: '中等', category: '二叉树', day: 18 },
-    { id: 105, title: 'Construct from Preorder/Inorder', difficulty: '中等', category: '二叉树', day: 19 },
-    { id: 114, title: 'Flatten to Linked List', difficulty: '中等', category: '二叉树', day: 19 },
+    { id: 104, title: 'Maximum Depth of Binary Tree', difficulty: '简单', category: '二叉树', day: 15 },
+    { id: 94,  title: 'Binary Tree Inorder Traversal', difficulty: '简单', category: '二叉树', day: 15 }, 
+    { id: 101, title: 'Symmetric Tree', difficulty: '简单', category: '二叉树', day: 16 },
+    { id: 226, title: 'Invert Binary Tree', difficulty: '简单', category: '二叉树', day: 16 },
+    { id: 102, title: 'Binary Tree Level Order Traversal', difficulty: '中等', category: '二叉树', day: 17 },
+    { id: 199, title: 'Binary Tree Right Side View', difficulty: '中等', category: '二叉树', day: 17 },
+    { id: 98,  title: 'Validate Binary Search Tree', difficulty: '中等', category: 'BST', day: 18 },
+    { id: 108, title: 'Convert Sorted Array to Binary Search Tree', difficulty: '简单', category: 'BST', day: 18 },
+    { id: 230, title: 'Kth Smallest Element in a BST', difficulty: '中等', category: 'BST', day: 19 },
+    { id: 236, title: 'Lowest Common Ancestor of a Binary Tree', difficulty: '中等', category: '二叉树', day: 19 },
     
-    // 第4周：二叉搜索树+二叉树进阶
-    { id: 98, title: 'Validate BST', difficulty: '中等', category: 'BST', day: 22 },
-    { id: 230, title: 'Kth Smallest in BST', difficulty: '中等', category: 'BST', day: 22 },
-    { id: 199, title: 'Binary Tree Right Side View', difficulty: '中等', category: 'BST', day: 23 },
-    { id: 236, title: 'Lowest Common Ancestor', difficulty: '中等', category: '二叉树', day: 23 },
-    { id: 124, title: 'Binary Tree Max Path Sum', difficulty: '困难', category: '二叉树', day: 24 },
-    { id: 297, title: 'Serialize/Deserialize Tree', difficulty: '困难', category: '二叉树', day: 24 },
+    // 第4周：二叉树进阶
+    { id: 437, title: 'Path Sum III', difficulty: '中等', category: '二叉树', day: 22 },
+    { id: 543, title: 'Diameter of Binary Tree', difficulty: '简单', category: '二叉树', day: 22 },
+    { id: 105, title: 'Construct Binary Tree from Preorder and Inorder Traversal', difficulty: '中等', category: '二叉树', day: 23 },
+    { id: 114, title: 'Flatten Binary Tree to Linked List', difficulty: '中等', category: '二叉树', day: 23 },
+
     
     // 第5周：图论
     { id: 200, title: 'Number of Islands', difficulty: '中等', category: '图-DFS', day: 29 },
