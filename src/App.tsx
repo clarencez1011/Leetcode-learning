@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Download, CheckCircle, Circle, Calendar, BookOpen, RefreshCw } from 'lucide-react';
 
 const Hot100Plan = () => {
@@ -146,9 +146,49 @@ const Hot100Plan = () => {
     return plan;
   };
 
-  const [checkedProblems, setCheckedProblems] = useState({});
-  const [currentDay, setCurrentDay] = useState(1);
+  // 从 localStorage 加载进度
+  const loadProgress = () => {
+    try {
+      const saved = localStorage.getItem('hot100Progress');
+      return saved ? JSON.parse(saved) : {};
+    } catch (error) {
+      console.error('加载进度失败:', error);
+      return {};
+    }
+  };
+
+  // 从 localStorage 加载当前天数
+  const loadCurrentDay = () => {
+    try {
+      const saved = localStorage.getItem('hot100CurrentDay');
+      return saved ? parseInt(saved, 10) : 1;
+    } catch (error) {
+      console.error('加载当前天数失败:', error);
+      return 1;
+    }
+  };
+
+  const [checkedProblems, setCheckedProblems] = useState(loadProgress);
+  const [currentDay, setCurrentDay] = useState(loadCurrentDay);
   const planData = generateFullPlan();
+
+  // 当进度变化时保存到 localStorage
+  useEffect(() => {
+    try {
+      localStorage.setItem('hot100Progress', JSON.stringify(checkedProblems));
+    } catch (error) {
+      console.error('保存进度失败:', error);
+    }
+  }, [checkedProblems]);
+
+  // 当天数变化时保存到 localStorage
+  useEffect(() => {
+    try {
+      localStorage.setItem('hot100CurrentDay', currentDay.toString());
+    } catch (error) {
+      console.error('保存当前天数失败:', error);
+    }
+  }, [currentDay]);
 
   const toggleProblem = (problemId) => {
     setCheckedProblems(prev => ({
@@ -209,7 +249,7 @@ const Hot100Plan = () => {
               <h1 className="text-3xl font-bold text-gray-800 mb-2">
                 🔥 LeetCode Hot 100 刷题计划
               </h1>
-              <p className="text-gray-600">70天掌握高频面试题 · 1-3-7-14天复习法</p>
+              <p className="text-gray-600">70天掌握高频面试题 · 1-3-7-14天复习法 · 进度自动保存</p>
             </div>
             <button
               onClick={downloadCSV}
@@ -429,6 +469,15 @@ const Hot100Plan = () => {
                 <li>• 目标：每次用时递减</li>
               </ul>
             </div>
+          </div>
+          <div className="mt-4 p-3 bg-green-50 rounded-lg border border-green-200">
+            <p className="text-sm text-green-800 flex items-center gap-2">
+              <CheckCircle size={16} className="text-green-600 flex-shrink-0" />
+              <span>
+                <span className="font-semibold">💾 自动保存：</span>
+                你的刷题进度会自动保存到浏览器本地，刷新页面不会丢失。
+              </span>
+            </p>
           </div>
         </div>
       </div>
