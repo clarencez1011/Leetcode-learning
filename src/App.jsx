@@ -185,3 +185,4 @@ const hot100Problems = (() => {
 
   return result;
 })();
+export default App
