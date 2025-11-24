@@ -1,262 +1,139 @@
-
+// ✅ 1. 之前已经学过的题：题号 -> 当时的 day（1~31）
+const doneDayMap = {
+  1: 1, 49: 1, 128: 1,
+  11: 2, 283: 2,
+  3: 3, 438: 3,
+  53: 4, 56: 4,
+  41: 5, 238: 5,
+  21: 8, 141: 8, 206: 8,
+  142: 9, 160: 9,
+  148: 10, 234: 10,
+  23: 11, 25: 11,
+  20: 12, 155: 12,
+  84: 13, 739: 13,
+  94: 15, 104: 15,
+  101: 16, 226: 16,
+  102: 17, 199: 17,
+  98: 18, 108: 18,
+  230: 19, 236: 19,
+  437: 22, 543: 22,
+  105: 23, 114: 23,
+  200: 29, 994: 29,
+  207: 30, 208: 30,
+};
 import React, { useState, useEffect } from 'react';
-
 import { Download, CheckCircle, Circle, Calendar, BookOpen, RefreshCw } from 'lucide-react';
 
-
-
 const Hot100Plan = () => {
-
-// 定义Hot 100题目
-
-const hot100Problems = [
-
-// 第1周:哈希表+数组
-
-{ id: 1, title: 'Two Sum', difficulty: '简单', category: '哈希表', day: 1 },
-
-{ id: 49, title: 'Group Anagrams', difficulty: '中等', category: '哈希表', day: 1 },
-
-{ id: 128, title: 'Longest Consecutive Sequence', difficulty: '中等', category: '哈希表', day: 1 },
-
-{ id: 283, title: 'Move Zeroes', difficulty: '简单', category: '双指针', day: 2 },
-
-{ id: 11, title: 'Container With Most Water', difficulty: '中等', category: '双指针', day: 2 },
-
-{ id: 3, title: 'Longest Substring Without Repeating', difficulty: '中等', category: '滑动窗口', day: 3 },
-
-{ id: 438, title: 'Find All Anagrams', difficulty: '中等', category: '滑动窗口', day: 3 },
-
-{ id: 53, title: 'Maximum Subarray', difficulty: '中等', category: '数组', day: 4 },
-
-{ id: 56, title: 'Merge Intervals', difficulty: '中等', category: '数组', day: 4 },
-
-{ id: 238, title: 'Product of Array Except Self', difficulty: '中等', category: '数组', day: 5 },
-
-{ id: 41, title: 'First Missing Positive', difficulty: '困难', category: '数组', day: 5 },
-
-
-
-// 第2周:链表+栈
-
-{ id: 206, title: 'Reverse Linked List', difficulty: '简单', category: '链表', day: 8 },
-
-{ id: 21, title: 'Merge Two Sorted Lists', difficulty: '简单', category: '链表', day: 8 },
-
-{ id: 141, title: 'Linked List Cycle', difficulty: '简单', category: '链表', day: 8 },
-
-{ id: 142, title: 'Linked List Cycle II', difficulty: '中等', category: '链表', day: 9 },
-
-{ id: 160, title: 'Intersection of Two Lists', difficulty: '简单', category: '链表', day: 9 },
-
-{ id: 234, title: 'Palindrome Linked List', difficulty: '简单', category: '链表', day: 10 },
-
-{ id: 148, title: 'Sort List', difficulty: '中等', category: '链表', day: 10 },
-
-{ id: 23, title: 'Merge k Sorted Lists', difficulty: '困难', category: '链表', day: 11 },
-
-{ id: 25, title: 'Reverse Nodes in k-Group', difficulty: '困难', category: '链表', day: 11 },
-
-{ id: 20, title: 'Valid Parentheses', difficulty: '简单', category: '栈', day: 12 },
-
-{ id: 155, title: 'Min Stack', difficulty: '中等', category: '栈', day: 12 },
-
-{ id: 739, title: 'Daily Temperatures', difficulty: '中等', category: '单调栈', day: 13 },
-
-{ id: 84, title: 'Largest Rectangle', difficulty: '困难', category: '单调栈', day: 13 },
-
-
-
-// 第3周:二叉树基础
-
-{ id: 104, title: 'Maximum Depth of Binary Tree', difficulty: '简单', category: '二叉树', day: 15 },
-
-{ id: 94, title: 'Binary Tree Inorder Traversal', difficulty: '简单', category: '二叉树', day: 15 },
-
-{ id: 101, title: 'Symmetric Tree', difficulty: '简单', category: '二叉树', day: 16 },
-
-{ id: 226, title: 'Invert Binary Tree', difficulty: '简单', category: '二叉树', day: 16 },
-
-{ id: 102, title: 'Binary Tree Level Order Traversal', difficulty: '中等', category: '二叉树', day: 17 },
-
-{ id: 199, title: 'Binary Tree Right Side View', difficulty: '中等', category: '二叉树', day: 17 },
-
-{ id: 98, title: 'Validate Binary Search Tree', difficulty: '中等', category: 'BST', day: 18 },
-
-{ id: 108, title: 'Convert Sorted Array to Binary Search Tree', difficulty: '简单', category: 'BST', day: 18 },
-
-{ id: 230, title: 'Kth Smallest Element in a BST', difficulty: '中等', category: 'BST', day: 19 },
-
-{ id: 236, title: 'Lowest Common Ancestor of a Binary Tree', difficulty: '中等', category: '二叉树', day: 19 },
-
-
-
-// 第4周:二叉树进阶
-
-{ id: 437, title: 'Path Sum III', difficulty: '中等', category: '二叉树', day: 22 },
-
-{ id: 543, title: 'Diameter of Binary Tree', difficulty: '简单', category: '二叉树', day: 22 },
-
-{ id: 105, title: 'Construct Binary Tree from Preorder and Inorder Traversal', difficulty: '中等', category: '二叉树', day: 23 },
-
-{ id: 114, title: 'Flatten Binary Tree to Linked List', difficulty: '中等', category: '二叉树', day: 23 },
-
-
-
-// 第5周:图论 (day 32后开始更新)
-
-{ id: 200, title: 'Number of Islands', difficulty: '中等', category: '图-DFS', day: 33 },
-
-{ id: 994, title: 'Rotting Oranges', difficulty: '中等', category: '图-BFS', day: 33 },
-
-{ id: 207, title: 'Course Schedule', difficulty: '中等', category: '拓扑排序', day: 34 },
-
-{ id: 208, title: 'Implement Trie', difficulty: '中等', category: 'Trie', day: 34 },
-
-
-
-// 第6周:动态规划-基础
-
-{ id: 70, title: 'Climbing Stairs', difficulty: '简单', category: 'DP-基础', day: 36 },
-
-{ id: 118, title: 'Pascals Triangle', difficulty: '简单', category: 'DP-基础', day: 36 },
-
-{ id: 198, title: 'House Robber', difficulty: '中等', category: 'DP-线性', day: 37 },
-
-{ id: 279, title: 'Perfect Squares', difficulty: '中等', category: 'DP-完全背包', day: 38 },
-
-{ id: 322, title: 'Coin Change', difficulty: '中等', category: 'DP-完全背包', day: 38 },
-
-{ id: 139, title: 'Word Break', difficulty: '中等', category: 'DP-字符串', day: 39 },
-
-{ id: 300, title: 'Longest Increasing Subsequence', difficulty: '中等', category: 'DP-子序列', day: 39 },
-
-
-
-// 第7周:动态规划-进阶
-
-{ id: 152, title: 'Maximum Product Subarray', difficulty: '中等', category: 'DP-数组', day: 43 },
-
-{ id: 416, title: 'Partition Equal Subset Sum', difficulty: '中等', category: 'DP-背包', day: 43 },
-
-{ id: 32, title: 'Longest Valid Parentheses', difficulty: '困难', category: 'DP-字符串', day: 44 },
-
-{ id: 72, title: 'Edit Distance', difficulty: '困难', category: 'DP-字符串', day: 44 },
-
-{ id: 5, title: 'Longest Palindromic Substring', difficulty: '中等', category: 'DP-字符串', day: 45 },
-
-{ id: 1143, title: 'Longest Common Subsequence', difficulty: '中等', category: 'DP-字符串', day: 46 },
-
-
-
-// 第8周:回溯
-
-{ id: 46, title: 'Permutations', difficulty: '中等', category: '回溯-排列', day: 50 },
-
-{ id: 78, title: 'Subsets', difficulty: '中等', category: '回溯-子集', day: 51 },
-
-{ id: 39, title: 'Combination Sum', difficulty: '中等', category: '回溯-组合', day: 52 },
-
-{ id: 17, title: 'Letter Combinations of a Phone Number', difficulty: '中等', category: '回溯', day: 52 },
-
-{ id: 22, title: 'Generate Parentheses', difficulty: '中等', category: '回溯', day: 53 },
-
-{ id: 79, title: 'Word Search', difficulty: '中等', category: '回溯-矩阵', day: 53 },
-
-{ id: 131, title: 'Palindrome Partitioning', difficulty: '中等', category: '回溯', day: 54 },
-
-{ id: 51, title: 'N-Queens', difficulty: '困难', category: '回溯', day: 54 },
-
-
-
-// 第9周:贪心+其他
-
-{ id: 121, title: 'Best Time to Buy/Sell Stock', difficulty: '简单', category: '贪心', day: 57 },
-
-{ id: 55, title: 'Jump Game', difficulty: '中等', category: '贪心', day: 58 },
-
-{ id: 45, title: 'Jump Game II', difficulty: '中等', category: '贪心', day: 58 },
-
-{ id: 763, title: 'Partition Labels', difficulty: '中等', category: '贪心', day: 59 },
-
-
-
-// 第10周:高频其他题
-
-{ id: 136, title: 'Single Number', difficulty: '简单', category: '位运算', day: 64 },
-
-{ id: 169, title: 'Majority Element', difficulty: '简单', category: '数组', day: 64 },
-
-{ id: 75, title: 'Sort Colors', difficulty: '中等', category: '排序', day: 65 },
-
-{ id: 31, title: 'Next Permutation', difficulty: '中等', category: '数组', day: 65 },
-
-{ id: 189, title: 'Rotate Array', difficulty: '中等', category: '数组', day: 66 },
-
-{ id: 287, title: 'Find Duplicate Number', difficulty: '中等', category: '数组', day: 66 },
-
-{ id: 347, title: 'Top K Frequent Elements', difficulty: '中等', category: '堆', day: 67 },
-
-{ id: 215, title: 'Kth Largest Element', difficulty: '中等', category: '堆', day: 67 },
-
-{ id: 295, title: 'Find Median from Stream', difficulty: '困难', category: '堆', day: 68 },
-
-{ id: 239, title: 'Sliding Window Maximum', difficulty: '困难', category: '单调队列', day: 68 },
-
-
-Change
-11
-of 21
-
-// 补充题目
-
-{ id: 560, title: 'Subarray Sum Equals K', difficulty: '中等', category: '哈希表', day: 35 },
-
-{ id: 76, title: 'Minimum Window Substring', difficulty: '困难', category: '滑动窗口', day: 40 },
-
-{ id: 15, title: '3Sum', difficulty: '中等', category: '双指针', day: 41 },
-
-{ id: 42, title: 'Trapping Rain Water', difficulty: '困难', category: '双指针', day: 42 },
-
-{ id: 2, title: 'Add Two Numbers', difficulty: '中等', category: '链表', day: 47 },
-
-{ id: 19, title: 'Remove Nth Node From End of List', difficulty: '中等', category: '链表', day: 47 },
-
-{ id: 24, title: 'Swap Nodes in Pairs', difficulty: '中等', category: '链表', day: 48 },
-
-{ id: 138, title: 'Copy List with Random Pointer', difficulty: '中等', category: '链表', day: 48 },
-
-{ id: 146, title: 'LRU Cache', difficulty: '中等', category: '链表', day: 49 },
-
-{ id: 394, title: 'Decode String', difficulty: '中等', category: '栈', day: 55 },
-
-{ id: 48, title: 'Rotate Image', difficulty: '中等', category: '矩阵', day: 60 },
-
-{ id: 54, title: 'Spiral Matrix', difficulty: '中等', category: '矩阵', day: 60 },
-
-{ id: 73, title: 'Set Matrix Zeroes', difficulty: '中等', category: '矩阵', day: 61 },
-
-{ id: 240, title: 'Search 2D Matrix II', difficulty: '中等', category: '矩阵', day: 61 },
-
-{ id: 34, title: 'Find First and Last Position of Element in Sorted Array', difficulty: '中等', category: '二分', day: 62 },
-
-{ id: 33, title: 'Search in Rotated Sorted Array', difficulty: '中等', category: '二分', day: 62 },
-
-{ id: 35, title: 'Search Insert Position', difficulty: '简单', category: '二分', day: 63 },
-
-{ id: 74, title: 'Search a 2D Matrix', difficulty: '中等', category: '二分', day: 63 },
-
-{ id: 153, title: 'Find Minimum in Rotated Sorted Array', difficulty: '中等', category: '二分', day: 69 },
-
-{ id: 4, title: 'Median of Two Sorted Arrays', difficulty: '困难', category: '二分', day: 70 },
-
-{ id: 124, title: 'Binary Tree Maximum Path Sum', difficulty: '困难', category: '二叉树', day: 56 },
-
-{ id: 64, title: 'Minimum Path Sum', difficulty: '中等', category: 'DP', day: 37 },
-
-{ id: 62, title: 'Unique Paths', difficulty: '中等', category: 'DP', day: 36 },
-
-];
+  // 定义Hot 100题目
+  const hot100Problems = [
+    // 第1周：哈希表+数组
+    { id: 1, title: 'Two Sum', difficulty: '简单', category: '哈希表', day: 1 },
+    { id: 49, title: 'Group Anagrams', difficulty: '中等', category: '哈希表', day: 1 },
+    { id: 128, title: 'Longest Consecutive Sequence', difficulty: '中等', category: '哈希表', day: 1 },
+    { id: 283, title: 'Move Zeroes', difficulty: '简单', category: '双指针', day: 2 },
+    { id: 11, title: 'Container With Most Water', difficulty: '中等', category: '双指针', day: 2 },
+    { id: 3, title: 'Longest Substring Without Repeating', difficulty: '中等', category: '滑动窗口', day: 3 },
+    { id: 438, title: 'Find All Anagrams', difficulty: '中等', category: '滑动窗口', day: 3 },
+    { id: 53, title: 'Maximum Subarray', difficulty: '中等', category: '数组', day: 4 },
+    { id: 56, title: 'Merge Intervals', difficulty: '中等', category: '数组', day: 4 },
+    { id: 238, title: 'Product of Array Except Self', difficulty: '中等', category: '数组', day: 5 },
+    { id: 41, title: 'First Missing Positive', difficulty: '困难', category: '数组', day: 5 },
+    
+    // 第2周：链表+栈
+    { id: 206, title: 'Reverse Linked List', difficulty: '简单', category: '链表', day: 8 },
+    { id: 21, title: 'Merge Two Sorted Lists', difficulty: '简单', category: '链表', day: 8 },
+    { id: 141, title: 'Linked List Cycle', difficulty: '简单', category: '链表', day: 8 },
+    { id: 142, title: 'Linked List Cycle II', difficulty: '中等', category: '链表', day: 9 },
+    { id: 160, title: 'Intersection of Two Lists', difficulty: '简单', category: '链表', day: 9 },
+    { id: 234, title: 'Palindrome Linked List', difficulty: '简单', category: '链表', day: 10 },
+    { id: 148, title: 'Sort List', difficulty: '中等', category: '链表', day: 10 },
+    { id: 23, title: 'Merge k Sorted Lists', difficulty: '困难', category: '链表', day: 11 },
+    { id: 25, title: 'Reverse Nodes in k-Group', difficulty: '困难', category: '链表', day: 11 },
+    { id: 20, title: 'Valid Parentheses', difficulty: '简单', category: '栈', day: 12 },
+    { id: 155, title: 'Min Stack', difficulty: '中等', category: '栈', day: 12 },
+    { id: 739, title: 'Daily Temperatures', difficulty: '中等', category: '单调栈', day: 13 },
+    { id: 84, title: 'Largest Rectangle', difficulty: '困难', category: '单调栈', day: 13 },
+    
+    // 第3周：二叉树基础
+    { id: 104, title: 'Maximum Depth of Binary Tree', difficulty: '简单', category: '二叉树', day: 15 },
+    { id: 94,  title: 'Binary Tree Inorder Traversal', difficulty: '简单', category: '二叉树', day: 15 }, 
+    { id: 101, title: 'Symmetric Tree', difficulty: '简单', category: '二叉树', day: 16 },
+    { id: 226, title: 'Invert Binary Tree', difficulty: '简单', category: '二叉树', day: 16 },
+    { id: 102, title: 'Binary Tree Level Order Traversal', difficulty: '中等', category: '二叉树', day: 17 },
+    { id: 199, title: 'Binary Tree Right Side View', difficulty: '中等', category: '二叉树', day: 17 },
+    { id: 98,  title: 'Validate Binary Search Tree', difficulty: '中等', category: 'BST', day: 18 },
+    { id: 108, title: 'Convert Sorted Array to Binary Search Tree', difficulty: '简单', category: 'BST', day: 18 },
+    { id: 230, title: 'Kth Smallest Element in a BST', difficulty: '中等', category: 'BST', day: 19 },
+    { id: 236, title: 'Lowest Common Ancestor of a Binary Tree', difficulty: '中等', category: '二叉树', day: 19 },
+    
+    // 第4周：二叉树进阶
+    { id: 437, title: 'Path Sum III', difficulty: '中等', category: '二叉树', day: 22 },
+    { id: 543, title: 'Diameter of Binary Tree', difficulty: '简单', category: '二叉树', day: 22 },
+    { id: 105, title: 'Construct Binary Tree from Preorder and Inorder Traversal', difficulty: '中等', category: '二叉树', day: 23 },
+    { id: 114, title: 'Flatten Binary Tree to Linked List', difficulty: '中等', category: '二叉树', day: 23 },
+
+    
+    // 第5周：图论
+    { id: 200, title: 'Number of Islands', difficulty: '中等', category: '图-DFS', day: 29 },
+    { id: 994, title: 'Rotting Oranges', difficulty: '中等', category: '图-BFS', day: 29 },
+    { id: 207, title: 'Course Schedule', difficulty: '中等', category: '拓扑排序', day: 30 },
+    { id: 208, title: 'Implement Trie', difficulty: '中等', category: 'Trie', day: 30 },
+    { id: 399, title: 'Evaluate Division', difficulty: '中等', category: '图-DFS', day: 31 },
+    { id: 406, title: 'Queue Reconstruction', difficulty: '中等', category: '贪心', day: 31 },
+    
+    // 第6周：动态规划-基础
+    { id: 70, title: 'Climbing Stairs', difficulty: '简单', category: 'DP-基础', day: 36 },
+    { id: 118, title: 'Pascals Triangle', difficulty: '简单', category: 'DP-基础', day: 36 },
+    { id: 198, title: 'House Robber', difficulty: '中等', category: 'DP-线性', day: 37 },
+    { id: 213, title: 'House Robber II', difficulty: '中等', category: 'DP-线性', day: 37 },
+    { id: 279, title: 'Perfect Squares', difficulty: '中等', category: 'DP-完全背包', day: 38 },
+    { id: 322, title: 'Coin Change', difficulty: '中等', category: 'DP-完全背包', day: 38 },
+    { id: 139, title: 'Word Break', difficulty: '中等', category: 'DP-字符串', day: 39 },
+    { id: 300, title: 'Longest Increasing Subsequence', difficulty: '中等', category: 'DP-子序列', day: 39 },
+    
+    // 第7周：动态规划-进阶
+    { id: 152, title: 'Maximum Product Subarray', difficulty: '中等', category: 'DP-数组', day: 43 },
+    { id: 416, title: 'Partition Equal Subset Sum', difficulty: '中等', category: 'DP-背包', day: 43 },
+    { id: 32, title: 'Longest Valid Parentheses', difficulty: '困难', category: 'DP-字符串', day: 44 },
+    { id: 72, title: 'Edit Distance', difficulty: '困难', category: 'DP-字符串', day: 44 },
+    { id: 5, title: 'Longest Palindromic Substring', difficulty: '中等', category: 'DP-字符串', day: 45 },
+    { id: 647, title: 'Palindromic Substrings', difficulty: '中等', category: 'DP-字符串', day: 45 },
+    { id: 221, title: 'Maximal Square', difficulty: '中等', category: 'DP-矩阵', day: 46 },
+    { id: 85, title: 'Maximal Rectangle', difficulty: '困难', category: 'DP-矩阵', day: 46 },
+    
+    // 第8周：回溯
+    { id: 46, title: 'Permutations', difficulty: '中等', category: '回溯-排列', day: 50 },
+    { id: 47, title: 'Permutations II', difficulty: '中等', category: '回溯-排列', day: 50 },
+    { id: 78, title: 'Subsets', difficulty: '中等', category: '回溯-子集', day: 51 },
+    { id: 90, title: 'Subsets II', difficulty: '中等', category: '回溯-子集', day: 51 },
+    { id: 39, title: 'Combination Sum', difficulty: '中等', category: '回溯-组合', day: 52 },
+    { id: 40, title: 'Combination Sum II', difficulty: '中等', category: '回溯-组合', day: 52 },
+    { id: 22, title: 'Generate Parentheses', difficulty: '中等', category: '回溯', day: 53 },
+    { id: 79, title: 'Word Search', difficulty: '中等', category: '回溯-矩阵', day: 53 },
+    { id: 131, title: 'Palindrome Partitioning', difficulty: '中等', category: '回溯', day: 54 },
+    { id: 51, title: 'N-Queens', difficulty: '困难', category: '回溯', day: 54 },
+    
+    // 第9周：贪心+其他
+    { id: 121, title: 'Best Time to Buy/Sell Stock', difficulty: '简单', category: '贪心', day: 57 },
+    { id: 122, title: 'Best Time II', difficulty: '中等', category: '贪心', day: 57 },
+    { id: 55, title: 'Jump Game', difficulty: '中等', category: '贪心', day: 58 },
+    { id: 45, title: 'Jump Game II', difficulty: '中等', category: '贪心', day: 58 },
+    { id: 763, title: 'Partition Labels', difficulty: '中等', category: '贪心', day: 59 },
+    { id: 621, title: 'Task Scheduler', difficulty: '中等', category: '贪心', day: 59 },
+    
+    // 第10周：高频其他题
+    { id: 136, title: 'Single Number', difficulty: '简单', category: '位运算', day: 64 },
+    { id: 169, title: 'Majority Element', difficulty: '简单', category: '数组', day: 64 },
+    { id: 75, title: 'Sort Colors', difficulty: '中等', category: '排序', day: 65 },
+    { id: 31, title: 'Next Permutation', difficulty: '中等', category: '数组', day: 65 },
+    { id: 287, title: 'Find Duplicate Number', difficulty: '中等', category: '数组', day: 66 },
+    { id: 240, title: 'Search 2D Matrix II', difficulty: '中等', category: '矩阵', day: 66 },
+    { id: 347, title: 'Top K Frequent Elements', difficulty: '中等', category: '堆', day: 67 },
+    { id: 215, title: 'Kth Largest Element', difficulty: '中等', category: '堆', day: 67 },
+    { id: 295, title: 'Find Median from Stream', difficulty: '困难', category: '堆', day: 68 },
+    { id: 239, title: 'Sliding Window Maximum', difficulty: '困难', category: '单调队列', day: 68 },
+  ];
 
   // 生成完整的70天计划（包括复习）
   const generateFullPlan = () => {
@@ -326,15 +203,163 @@ of 21
     }
   }, [checkedProblems]);
 
+// ✅ 2. 最新 Top 100 Liked 题单（只保留截图里的题）
+// 不带 day 信息，由下面的 build 函数自动分配 day
+const rawProblems = [
+  // Backtracking
+  { id: 17, title: 'Letter Combinations of a Phone Number', difficulty: '中等', category: '回溯-组合' },
+  { id: 22, title: 'Generate Parentheses', difficulty: '中等', category: '回溯' },
+  { id: 39, title: 'Combination Sum', difficulty: '中等', category: '回溯-组合' },
+  { id: 46, title: 'Permutations', difficulty: '中等', category: '回溯-排列' },
+  { id: 51, title: 'N-Queens', difficulty: '困难', category: '回溯' },
+  { id: 78, title: 'Subsets', difficulty: '中等', category: '回溯-子集' },
+  { id: 79, title: 'Word Search', difficulty: '中等', category: '回溯-矩阵' },
+  { id: 131, title: 'Palindrome Partitioning', difficulty: '中等', category: '回溯' },
+
+  // Binary Search
+  { id: 4, title: 'Median of Two Sorted Arrays', difficulty: '困难', category: '二分查找' },
+  { id: 33, title: 'Search in Rotated Sorted Array', difficulty: '中等', category: '二分查找' },
+  { id: 34, title: 'Find First and Last Position of Element in Sorted Array', difficulty: '中等', category: '二分查找' },
+  { id: 35, title: 'Search Insert Position', difficulty: '简单', category: '二分查找' },
+  { id: 74, title: 'Search a 2D Matrix', difficulty: '中等', category: '二分查找' },
+  { id: 124, title: 'Binary Tree Maximum Path Sum', difficulty: '困难', category: '二叉树' },
+  { id: 153, title: 'Find Minimum in Rotated Sorted Array', difficulty: '中等', category: '二分查找' },
+
+  // Binary Tree
+  { id: 94, title: 'Binary Tree Inorder Traversal', difficulty: '简单', category: '二叉树' },
+  { id: 98, title: 'Validate Binary Search Tree', difficulty: '中等', category: 'BST' },
+  { id: 101, title: 'Symmetric Tree', difficulty: '简单', category: '二叉树' },
+  { id: 102, title: 'Binary Tree Level Order Traversal', difficulty: '中等', category: '二叉树' },
+  { id: 104, title: 'Maximum Depth of Binary Tree', difficulty: '简单', category: '二叉树' },
+  { id: 105, title: 'Construct Binary Tree from Preorder and Inorder Traversal', difficulty: '中等', category: '二叉树' },
+  { id: 108, title: 'Convert Sorted Array to Binary Search Tree', difficulty: '简单', category: 'BST' },
+  { id: 114, title: 'Flatten Binary Tree to Linked List', difficulty: '中等', category: '二叉树' },
+  { id: 199, title: 'Binary Tree Right Side View', difficulty: '中等', category: '二叉树' },
+  { id: 226, title: 'Invert Binary Tree', difficulty: '简单', category: '二叉树' },
+  { id: 230, title: 'Kth Smallest Element in a BST', difficulty: '中等', category: 'BST' },
+  { id: 236, title: 'Lowest Common Ancestor of a Binary Tree', difficulty: '中等', category: '二叉树' },
+  { id: 437, title: 'Path Sum III', difficulty: '中等', category: '二叉树' },
+  { id: 543, title: 'Diameter of Binary Tree', difficulty: '简单', category: '二叉树' },
+
+  // Dynamic Programming
+  { id: 5, title: 'Longest Palindromic Substring', difficulty: '中等', category: 'DP-字符串' },
+  { id: 32, title: 'Longest Valid Parentheses', difficulty: '困难', category: 'DP-字符串' },
+  { id: 62, title: 'Unique Paths', difficulty: '中等', category: 'DP-矩阵' },
+  { id: 64, title: 'Minimum Path Sum', difficulty: '中等', category: 'DP-矩阵' },
+  { id: 70, title: 'Climbing Stairs', difficulty: '简单', category: 'DP-基础' },
+  { id: 72, title: 'Edit Distance', difficulty: '困难', category: 'DP-字符串' },
+  { id: 118, title: 'Pascals Triangle', difficulty: '简单', category: 'DP-基础' },
+  { id: 139, title: 'Word Break', difficulty: '中等', category: 'DP-字符串' },
+  { id: 152, title: 'Maximum Product Subarray', difficulty: '中等', category: 'DP-数组' },
+  { id: 198, title: 'House Robber', difficulty: '中等', category: 'DP-线性' },
+  { id: 279, title: 'Perfect Squares', difficulty: '中等', category: 'DP-完全背包' },
+  { id: 300, title: 'Longest Increasing Subsequence', difficulty: '中等', category: 'DP-子序列' },
+  { id: 322, title: 'Coin Change', difficulty: '中等', category: 'DP-完全背包' },
+  { id: 416, title: 'Partition Equal Subset Sum', difficulty: '中等', category: 'DP-背包' },
+  { id: 1143, title: 'Longest Common Subsequence', difficulty: '中等', category: 'DP-字符串' },
+
+  // Graph
+  { id: 200, title: 'Number of Islands', difficulty: '中等', category: '图-DFS' },
+  { id: 207, title: 'Course Schedule', difficulty: '中等', category: '拓扑排序' },
+  { id: 994, title: 'Rotting Oranges', difficulty: '中等', category: '图-BFS' },
+
+  // Greedy
+  { id: 45, title: 'Jump Game II', difficulty: '中等', category: '贪心' },
+  { id: 55, title: 'Jump Game', difficulty: '中等', category: '贪心' },
+  { id: 121, title: 'Best Time to Buy and Sell Stock', difficulty: '简单', category: '贪心' },
+  { id: 763, title: 'Partition Labels', difficulty: '中等', category: '贪心' },
+
+  // Hashing
+  { id: 1, title: 'Two Sum', difficulty: '简单', category: '哈希表' },
+  { id: 49, title: 'Group Anagrams', difficulty: '中等', category: '哈希表' },
+  { id: 128, title: 'Longest Consecutive Sequence', difficulty: '中等', category: '哈希表' },
+  { id: 560, title: 'Subarray Sum Equals K', difficulty: '中等', category: '哈希表' },
+
+  // Heap
+  { id: 215, title: 'Kth Largest Element in an Array', difficulty: '中等', category: '堆' },
+  { id: 295, title: 'Find Median from Data Stream', difficulty: '困难', category: '堆' },
+  { id: 347, title: 'Top K Frequent Elements', difficulty: '中等', category: '堆' },
+
+  // Linked Lists
+  { id: 2, title: 'Add Two Numbers', difficulty: '中等', category: '链表' },
+  { id: 19, title: 'Remove Nth Node From End of List', difficulty: '中等', category: '链表' },
+  { id: 21, title: 'Merge Two Sorted Lists', difficulty: '简单', category: '链表' },
+  { id: 23, title: 'Merge k Sorted Lists', difficulty: '困难', category: '链表' },
+  { id: 24, title: 'Swap Nodes in Pairs', difficulty: '中等', category: '链表' },
+  { id: 25, title: 'Reverse Nodes in k-Group', difficulty: '困难', category: '链表' },
+  { id: 138, title: 'Copy List with Random Pointer', difficulty: '中等', category: '链表' },
+  { id: 141, title: 'Linked List Cycle', difficulty: '简单', category: '链表' },
+  { id: 142, title: 'Linked List Cycle II', difficulty: '中等', category: '链表' },
+  { id: 146, title: 'LRU Cache', difficulty: '中等', category: '设计' },
+  { id: 148, title: 'Sort List', difficulty: '中等', category: '链表' },
+  { id: 160, title: 'Intersection of Two Linked Lists', difficulty: '简单', category: '链表' },
+  { id: 206, title: 'Reverse Linked List', difficulty: '简单', category: '链表' },
+  { id: 234, title: 'Palindrome Linked List', difficulty: '简单', category: '链表' },
+
+  // Matrix
+  { id: 48, title: 'Rotate Image', difficulty: '中等', category: '矩阵' },
+  { id: 54, title: 'Spiral Matrix', difficulty: '中等', category: '矩阵' },
+  { id: 73, title: 'Set Matrix Zeroes', difficulty: '中等', category: '矩阵' },
+  { id: 240, title: 'Search a 2D Matrix II', difficulty: '中等', category: '矩阵' },
+
+  // Sliding Window
+  { id: 3, title: 'Longest Substring Without Repeating Characters', difficulty: '中等', category: '滑动窗口' },
+  { id: 76, title: 'Minimum Window Substring', difficulty: '困难', category: '滑动窗口' },
+  { id: 239, title: 'Sliding Window Maximum', difficulty: '困难', category: '单调队列' },
+  { id: 438, title: 'Find All Anagrams in a String', difficulty: '中等', category: '滑动窗口' },
+
+  // Stack
+  { id: 20, title: 'Valid Parentheses', difficulty: '简单', category: '栈' },
+  { id: 84, title: 'Largest Rectangle in Histogram', difficulty: '困难', category: '单调栈' },
+  { id: 155, title: 'Min Stack', difficulty: '中等', category: '栈' },
+  { id: 394, title: 'Decode String', difficulty: '中等', category: '栈-字符串' },
+  { id: 739, title: 'Daily Temperatures', difficulty: '中等', category: '单调栈' },
+
+  // Two Pointers
+  { id: 11, title: 'Container With Most Water', difficulty: '中等', category: '双指针' },
+  { id: 15, title: '3Sum', difficulty: '中等', category: '双指针' },
+  { id: 42, title: 'Trapping Rain Water', difficulty: '困难', category: '双指针' },
+  { id: 283, title: 'Move Zeroes', difficulty: '简单', category: '双指针' },
+
+  // Trie
+  { id: 208, title: 'Implement Trie (Prefix Tree)', difficulty: '中等', category: 'Trie' },
+
+  // Misc
+  { id: 31, title: 'Next Permutation', difficulty: '中等', category: '数组' },
+  { id: 41, title: 'First Missing Positive', difficulty: '困难', category: '数组' },
+  { id: 53, title: 'Maximum Subarray', difficulty: '中等', category: '数组' },
+  { id: 56, title: 'Merge Intervals', difficulty: '中等', category: '数组' },
+  { id: 75, title: 'Sort Colors', difficulty: '中等', category: '排序' },
+  { id: 136, title: 'Single Number', difficulty: '简单', category: '位运算' },
+  { id: 169, title: 'Majority Element', difficulty: '简单', category: '数组' },
+  { id: 189, title: 'Rotate Array', difficulty: '中等', category: '数组' },
+  { id: 238, title: 'Product of Array Except Self', difficulty: '中等', category: '数组' },
+  { id: 287, title: 'Find the Duplicate Number', difficulty: '中等', category: '数组' },
+];
+
+// ✅ 3. 根据 doneDayMap + “每天两道新题” 自动生成带 day 的题库
+const hot100Problems = (() => {
+  const solved = [];
+  const unsolved = [];
+
+  rawProblems.forEach((p) => {
+    const day = doneDayMap[p.id];
+    if (day) {
+      solved.push({ ...p, day });
+    } else {
+      unsolved.push(p);
   // 当天数变化时保存到 localStorage
   useEffect(() => {
     try {
       localStorage.setItem('hot100CurrentDay', currentDay.toString());
     } catch (error) {
       console.error('保存当前天数失败:', error);
-    }
+}
+  });
   }, [currentDay]);
 
+  // 未做题按题号排序，你也可以改成按分类排
+  unsolved.sort((a, b) => a.id - b.id);
   const toggleProblem = (problemId) => {
     setCheckedProblems(prev => ({
       ...prev,
@@ -342,6 +367,8 @@ of 21
     }));
   };
 
+  let day = 32; // 从第 32 天开始排新题
+  const result = [...solved];
   const downloadCSV = () => {
     let csv = '日期,任务类型,复习轮次,题号,题目,难度,分类,原学习日期\n';
     
@@ -368,13 +395,18 @@ of 21
     link.click();
   };
 
+  unsolved.forEach((p, idx) => {
+    result.push({ ...p, day });
+    if (idx % 2 === 1) {
+      day += 1; // 每两题挪一天
   const getDifficultyColor = (difficulty) => {
     switch(difficulty) {
       case '简单': return 'text-green-600 bg-green-50 border-green-200';
       case '中等': return 'text-yellow-600 bg-yellow-50 border-yellow-200';
       case '困难': return 'text-red-600 bg-red-50 border-red-200';
       default: return 'text-gray-600 bg-gray-50 border-gray-200';
-    }
+}
+  });
   };
 
   const totalProblems = hot100Problems.length;
@@ -630,4 +662,7 @@ of 21
   );
 };
 
+  return result;
+})();
+export default App
 export default Hot100Plan;
